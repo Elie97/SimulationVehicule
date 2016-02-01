@@ -49,6 +49,7 @@ namespace SimulationVéhicule
             Components.Add(GestionInput);
             Components.Add(CaméraJeu);
             Components.Add(new Afficheur3D(this));
+            Components.Add(new Voiture(this, "ARC170", 0.05f, Vector3.Zero, Vector3.Zero, INTERVALLE_MAJ_STANDARD));
 
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);

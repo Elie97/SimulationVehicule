@@ -18,7 +18,6 @@ namespace SimulationVéhicule
         Vector3 Latéral { get; set; }
         float VitesseTranslation { get; set; }
         float VitesseRotation { get; set; }
-
         float IntervalleMAJ { get; set; }
         float TempsÉcouléDepuisMAJ { get; set; }
         InputManager GestionInput { get; set; }
@@ -62,9 +61,6 @@ namespace SimulationVéhicule
 
         protected override void CréerPointDeVue()
         {
-            // Méthode appelée s'il est nécessaire de recalculer la matrice de vue.
-            // Calcul et normalisation de certains vecteurs
-            // (à compléter)
             Direction = Vector3.Normalize(Direction);
             OrientationVerticale = Vector3.Normalize(OrientationVerticale);
             Vue = Matrix.CreateLookAt(Position, Position + Direction, OrientationVerticale);
@@ -73,18 +69,12 @@ namespace SimulationVéhicule
 
         protected override void CréerPointDeVue(Vector3 position, Vector3 cible, Vector3 orientation)
         {
-            // À la construction, initialisation des propriétés Position, Cible et OrientationVerticale,
-            // ainsi que le calcul des vecteur Direction, Latéral et le recalcul du vecteur OrientationVerticale
-            // permettant de calculer la matrice de vue de la caméra subjective
-            // (à compléter)
             Position = position;
             OrientationVerticale = orientation;
             Cible = cible;
-
             Direction = cible - Position;
             Latéral = Vector3.Cross(OrientationVerticale, Direction);
             OrientationVerticale = Vector3.Cross(Direction, Latéral);
-            //Création de la matrice de vue (point de vue)
             CréerPointDeVue();
         }
 
@@ -95,6 +85,7 @@ namespace SimulationVéhicule
             GestionClavier();
             if (TempsÉcouléDepuisMAJ >= IntervalleMAJ)
             {
+
                 if (GestionInput.EstEnfoncée(Keys.LeftShift) || GestionInput.EstEnfoncée(Keys.RightShift))
                 {
                     GérerAccélération();
@@ -169,35 +160,43 @@ namespace SimulationVéhicule
             Matrix lacet = new Matrix();
             if (GestionInput.EstEnfoncée(Keys.Left))
             {
-                lacet = Matrix.CreateFromAxisAngle(OrientationVerticale, DELTA_LACET);
+                lacet = Matrix.CreateFromAxisAngle(OrientationVerticale * VitesseRotation, DELTA_LACET);
             }
             if (GestionInput.EstEnfoncée(Keys.Right))
             {
-                lacet = Matrix.CreateFromAxisAngle(-OrientationVerticale, DELTA_LACET);
+                lacet = Matrix.CreateFromAxisAngle(-OrientationVerticale * VitesseRotation, DELTA_LACET);
             }
             Direction = Vector3.Transform(Direction, lacet);
         }
 
         private void GérerTangage()
         {
-            Matrix tangage = Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE);
+            Matrix tangage = new Matrix();
+            if (GestionInput.EstEnfoncée(Keys.Down))
+            {
+                Latéral = Vector3.Cross(Direction, OrientationVerticale) * VitesseRotation;
+            }
+            if (GestionInput.EstEnfoncée(Keys.Up))
+            {
+                Latéral = Vector3.Cross(OrientationVerticale, Direction) * VitesseRotation;
+            }
+            tangage = Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE);
             Direction = Vector3.Transform(Direction, tangage);
-            tangage = Matrix.CreateFromAxisAngle(Vector3.Cross(Direction, OrientationVerticale), DELTA_ROULIS);
+            tangage = Matrix.CreateFromAxisAngle(Latéral, DELTA_ROULIS);
             OrientationVerticale = Vector3.Transform(Vector3.Normalize(OrientationVerticale), tangage);
         }
 
-        private void GérerRoulis()//switch avec tangage je crois
+        private void GérerRoulis()
         {
             Matrix roulis = new Matrix();
-            //if (GestionInput.EstEnfoncée(Keys.Up))
-            //{
-            //roulis = Matrix.CreateFromAxisAngle(Direction, DELTA_ROULIS);
-            //}
-            //if (GestionInput.EstEnfoncée(Keys.Down))
-            //{
-            roulis = Matrix.CreateFromAxisAngle(Direction, DELTA_ROULIS);
-            //}
-            OrientationVerticale = OrientationVerticale * -1;
+            if (GestionInput.EstEnfoncée(Keys.PageUp))
+            {
+                roulis = Matrix.CreateFromAxisAngle(Direction * VitesseRotation, DELTA_ROULIS);
+            }
+            if (GestionInput.EstEnfoncée(Keys.PageDown))
+            {
+                roulis = Matrix.CreateFromAxisAngle(-Direction * VitesseRotation, DELTA_ROULIS);
+            }
             OrientationVerticale = Vector3.Transform(OrientationVerticale, roulis);
         }
 

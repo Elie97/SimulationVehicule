@@ -6,3 +6,6 @@ C:\Users\201448183\Documents\GitHub\SimulationVehicule\SimulationVéhicule\Simul
 C:\Users\201448183\Documents\GitHub\SimulationVehicule\SimulationVéhicule\SimulationVéhicule\SimulationVéhicule\obj\x86\Debug\SimulationVéhicule.pdb
 C:\Users\201448183\Documents\GitHub\SimulationVehicule\SimulationVéhicule\SimulationVéhicule\SimulationVéhicule\bin\x86\Debug\Composants.dll
 C:\Users\201448183\Documents\GitHub\SimulationVehicule\SimulationVéhicule\SimulationVéhicule\SimulationVéhicule\bin\x86\Debug\Composants.pdb
+C:\Users\201448183\Documents\GitHub\SimulationVehicule\SimulationVéhicule\SimulationVéhicule\SimulationVéhicule\bin\x86\Debug\Content\Models\ARC170.xnb
+C:\Users\201448183\Documents\GitHub\SimulationVehicule\SimulationVéhicule\SimulationVéhicule\SimulationVéhicule\bin\x86\Debug\Content\Models\ARC170_T.xnb
+C:\Users\201448183\Documents\GitHub\SimulationVehicule\SimulationVéhicule\SimulationVéhicule\SimulationVéhicule\bin\x86\Debug\Content\Models\ARC170_T_0.xnb
